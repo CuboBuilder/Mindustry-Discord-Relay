@@ -29,58 +29,15 @@ public class Main extends Plugin {
     private long serverTimeFinish;
 
     // Replace "<INSERT_DISCORD_WEBHOOK_HERE>" with your discord webhook url.
-    private String discordWebhook = "<INSERT_DISCORD_WEBHOOK_HERE>";
+    private String discordWebhook = "https://discord.com/api/webhooks/1299458318313721856/mSyy19GqgfE-FhFy7C2wlf0MdlDVUdzcZJpY7LttJI7wJYHHtHTWuQC0WyxJzc7p_hLb";
 
     public static HashMap<String, User> USERS = new HashMap<>();
 
     //register event handlers and create variables in the constructor
     public Main(){
-
-        //readConfigFile();
-
-        // Ignore the yellow on this line. It's just a fail safe but because discordWebhook is never changed and don't include that part of the string,
-        // it shows that this will always be ran. If you change it then it won't.
-        if(!discordWebhook.startsWith("https://discordapp.com/api/webhooks/")) {
-            System.out.println("Invalid discord webhookb!\n\nThis plugin will throw a lot of errors in the console if you don't attempt to fix this!");
-        }
-
         Events.on(EventType.ServerLoadEvent.class, event -> {
-            DiscordUtils.sendMessage(discordWebhook, "The console has been activated! This does not mean the server is up, continue to head into the console and load the server up.");
+            DiscordUtils.sendMessage(discordWebhook, "🟢 Server started 🟢");
         });
-
-        Events.on(EventType.PlayerJoin.class, event -> {
-            DiscordUtils.sendMessage(discordWebhook, event.player.name + " has joined the game!");
-            USERS.put(event.player.uuid, new User(event.player));
-        });
-
-        Events.on(EventType.PlayerLeave.class, event -> {
-            DiscordUtils.sendMessage(discordWebhook, event.player.name + " has left the game!");
-            USERS.remove(event.player.uuid);
-        });
-
-        Events.on(EventType.WorldLoadEvent.class, event -> {
-            serverTimeStart = System.currentTimeMillis();
-            DiscordUtils.sendMessage(discordWebhook, "A new game has started! Be sure to join and contribute to your fellow players! There are " + USERS.values().size() + " user(s) online.");
-        });
-
-        Events.on(EventType.GameOverEvent.class, event -> {
-            serverTimeFinish = System.currentTimeMillis();
-
-            long x = serverTimeFinish - serverTimeStart;
-            String time = FormatUtils.formatTime(x);
-            DiscordUtils.sendMessage(discordWebhook, "The current game has ended! The game ended at wave " + Vars.state.wave + " after " + time + " on the map '" + Vars.world.getMap().name() + "'!");
-        });
-
-        Events.on(EventType.PlayerChatEvent.class, event -> {
-            if(!event.message.startsWith("/")) {
-                if (event.player.isAdmin) {
-                    DiscordUtils.sendMessage(discordWebhook, event.player.name + " [ADMIN]: " + event.message);
-                } else {
-                    DiscordUtils.sendMessage(discordWebhook, event.player.name + ": " + event.message);
-                }
-            }
-        });
-    }
 
     //register commands that run on the server
     @Override
